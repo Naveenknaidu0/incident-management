@@ -168,13 +168,22 @@ export function IncidentHeader({ incident }: IncidentHeaderProps) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+              <DropdownMenuItem>Link Problem</DropdownMenuItem>
+              <DropdownMenuItem>Create Problem</DropdownMenuItem>
+              <DropdownMenuItem>Link Change</DropdownMenuItem>
+              <DropdownMenuItem>Create Change</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Merge Incidents</DropdownMenuItem>
+              <DropdownMenuItem>Split Incident</DropdownMenuItem>
+              <DropdownMenuItem>Add Watcher</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>SLA Override</DropdownMenuItem>
               <DropdownMenuItem>Add Note</DropdownMenuItem>
               <DropdownMenuItem>Clone Incident</DropdownMenuItem>
-              <DropdownMenuItem>Create Problem</DropdownMenuItem>
-              <DropdownMenuItem>Create Change</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Launch War Room</DropdownMenuItem>
               <DropdownMenuItem>Notify Stakeholders</DropdownMenuItem>
+              <DropdownMenuItem>Print</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="text-red-600">Cancel Incident</DropdownMenuItem>
             </DropdownMenuContent>

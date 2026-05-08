@@ -5,6 +5,10 @@ import {
   GitBranch, Bell, MessageSquare, AlertTriangle
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { WatcherPanel } from "./watcher-panel"
+import { EscalationPanel } from "./escalation-panel"
+import { ServiceImpactPanel } from "./service-impact-panel"
+import { SLAOverridePanel } from "./sla-override-panel"
 
 interface ContextWidget {
   id: string
@@ -108,6 +112,18 @@ export function ContextPanel() {
           })}
         </div>
       </div>
+
+      {/* SLA Status - Highest Priority */}
+      <SLAOverridePanel />
+
+      {/* Service Impact - Critical Information */}
+      <ServiceImpactPanel />
+
+      {/* Escalation History */}
+      <EscalationPanel />
+
+      {/* Watchers Panel */}
+      <WatcherPanel />
 
       {/* On-call Team */}
       <div className="rounded-lg border border-border bg-card">
