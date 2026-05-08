@@ -61,9 +61,9 @@ export function TopHeader() {
     if (type === "incident") {
       setQuickCreateOpen(true)
     } else if (type === "major-incident") {
-      router.push("/incidents/create?type=major")
+      router.push("/operations/incidents/create?type=major")
     } else if (type === "full-form") {
-      router.push("/incidents/create")
+      router.push("/operations/incidents/create")
     }
   }
 

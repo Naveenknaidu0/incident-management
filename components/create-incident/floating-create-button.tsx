@@ -23,7 +23,7 @@ export function FloatingCreateButton({ className }: FloatingCreateButtonProps) {
 
   const handleFullForm = () => {
     setIsOpen(false)
-    router.push("/incidents/create")
+    router.push("/operations/incidents/create")
   }
 
   return (

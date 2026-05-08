@@ -78,7 +78,7 @@ export function MajorIncidentsWidget() {
             </Badge>
           )}
         </div>
-        <Link href="/incidents/major" className="flex items-center gap-1 text-xs text-[#E69F50] hover:underline">
+        <Link href="/operations/incidents/major" className="flex items-center gap-1 text-xs text-[#E69F50] hover:underline">
           View All
           <ArrowUpRight className="h-3 w-3" />
         </Link>

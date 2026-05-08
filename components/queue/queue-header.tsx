@@ -186,7 +186,7 @@ export function QueueHeader({
                 Quick Create
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/incidents/create">Full Form</Link>
+                <Link href="/operations/incidents/create">Full Form</Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

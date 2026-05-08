@@ -30,7 +30,7 @@ export function ServiceHealthGrid({ services, title = "Service Health" }: Servic
             {title}
           </CardTitle>
           <Link
-            href="/cmdb/services"
+            href="/assets/services"
             className="text-xs text-muted-foreground hover:text-[#E69F50]"
           >
             View All

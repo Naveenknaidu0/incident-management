@@ -66,32 +66,69 @@ const navigation: NavSection[] = [
   {
     title: "",
     items: [
-      { label: "Dashboard", icon: LayoutDashboard, href: "/" },
+      { label: "Dashboard", icon: LayoutDashboard, href: "/home" },
     ],
   },
   {
-    title: "INCIDENTS",
+    title: "OPERATIONS",
     items: [
-      { label: "Create Incident", icon: Plus, href: "/incidents/create" },
-      { label: "All Incidents", icon: AlertCircle, href: "/incidents/all", badge: 847 },
-      { label: "Open", icon: FolderOpen, href: "/incidents/open", badge: 42 },
-      { label: "In Progress", icon: Clock, href: "/incidents/in-progress", badge: 18 },
-      { label: "Resolved", icon: CheckCircle, href: "/incidents/resolved", badge: 156 },
-      { label: "Closed", icon: XCircle, href: "/incidents/closed", badge: 1243 },
-      { label: "Escalated", icon: ArrowUpRight, href: "/incidents/escalated", badge: 5 },
-      { label: "VIP Incidents", icon: Star, href: "/incidents/vip", badge: 3 },
-      { label: "Watchlist", icon: Eye, href: "/incidents/watchlist", badge: 7 },
+      {
+        label: "Operations Dashboard",
+        icon: AlertTriangle,
+        href: "/operations",
+      },
     ],
   },
   {
-    title: "MAJOR INCIDENT",
+    title: "INCIDENT MANAGEMENT",
     items: [
-      { label: "Major Incidents", icon: Siren, href: "/major-incidents", badge: 2 },
+      { label: "Create Incident", icon: Plus, href: "/operations/incidents/create" },
+      { label: "All Incidents", icon: AlertCircle, href: "/operations/incidents/all", badge: 847 },
+      { label: "Open", icon: FolderOpen, href: "/operations/incidents/open", badge: 42 },
+      { label: "In Progress", icon: Clock, href: "/operations/incidents/in-progress", badge: 18 },
+      { label: "Resolved", icon: CheckCircle, href: "/operations/incidents/resolved", badge: 156 },
+      { label: "Closed", icon: XCircle, href: "/operations/incidents/closed", badge: 1243 },
+      { label: "Escalated", icon: ArrowUpRight, href: "/operations/incidents/escalated", badge: 5 },
+      { label: "VIP Incidents", icon: Star, href: "/operations/incidents/vip", badge: 3 },
+      { label: "Watchlist", icon: Eye, href: "/operations/incidents/watchlist", badge: 7 },
+    ],
+  },
+  {
+    title: "MAJOR INCIDENTS",
+    items: [
+      { label: "Major Incidents", icon: Siren, href: "/operations/major-incidents", badge: 2 },
       { label: "War Room", icon: Users, href: "/war-room" },
       { label: "Communication Center", icon: MessageSquare, href: "/communications" },
       { label: "Stakeholders", icon: Users, href: "/communications/stakeholders" },
       { label: "Broadcast Center", icon: Megaphone, href: "/communications/broadcast" },
       { label: "PIR Reports", icon: FileText, href: "/pir-reports" },
+    ],
+  },
+  {
+    title: "PROBLEM MANAGEMENT",
+    items: [
+      { label: "Problem Dashboard", icon: AlertTriangle, href: "/operations/problems" },
+      { label: "Known Errors", icon: Bug, href: "/operations/problems?tab=known-errors" },
+      { label: "Permanent Fixes", icon: Wrench, href: "/operations/problems?tab=fixes" },
+      { label: "Learnings", icon: Lightbulb, href: "/operations/problems?tab=learnings" },
+    ],
+  },
+  {
+    title: "CHANGE MANAGEMENT",
+    items: [
+      { label: "Changes Dashboard", icon: GitBranch, href: "/operations/changes" },
+      { label: "Pending Approval", icon: Clock, href: "/operations/changes?tab=pending", badge: 8 },
+      { label: "In Implementation", icon: Zap, href: "/operations/changes?tab=implementing", badge: 3 },
+      { label: "Completed", icon: CheckCircle, href: "/operations/changes?tab=completed" },
+    ],
+  },
+  {
+    title: "REQUEST MANAGEMENT",
+    items: [
+      { label: "Requests Dashboard", icon: FileText, href: "/operations/requests" },
+      { label: "Open Requests", icon: FolderOpen, href: "/operations/requests?tab=open", badge: 15 },
+      { label: "In Progress", icon: Clock, href: "/operations/requests?tab=in-progress", badge: 7 },
+      { label: "Fulfilled", icon: CheckCircle, href: "/operations/requests?tab=fulfilled" },
     ],
   },
   {
@@ -106,9 +143,8 @@ const navigation: NavSection[] = [
     ],
   },
   {
-    title: "OPERATIONS",
+    title: "SLA & AUTOMATION",
     items: [
-      { label: "Tasks", icon: ListTodo, href: "/tasks", badge: 12 },
       { label: "SLA Operations", icon: Timer, href: "/sla", badge: 23 },
       { label: "Escalation Center", icon: AlertTriangle, href: "/sla/escalations", badge: 6 },
       { label: "SLA Policies", icon: FileText, href: "/sla/policies" },
@@ -118,22 +154,13 @@ const navigation: NavSection[] = [
     ],
   },
   {
-    title: "PROBLEM MANAGEMENT",
+    title: "ASSETS",
     items: [
-      { label: "Problem Dashboard", icon: AlertTriangle, href: "/problems" },
-      { label: "Known Errors", icon: Bug, href: "/problems?tab=known-errors" },
-      { label: "Permanent Fixes", icon: Wrench, href: "/problems?tab=fixes" },
-      { label: "Learnings", icon: Lightbulb, href: "/problems?tab=learnings" },
-    ],
-  },
-  {
-    title: "SERVICE MANAGEMENT",
-    items: [
-      { label: "CMDB Dashboard", icon: Database, href: "/cmdb" },
-      { label: "Service Catalog", icon: Layers, href: "/cmdb/services" },
-      { label: "CI Explorer", icon: GitBranch, href: "/cmdb/ci" },
-      { label: "Dependencies", icon: GitBranch, href: "/cmdb/dependencies" },
-      { label: "Impact Analysis", icon: Layers, href: "/cmdb/impact" },
+      { label: "Asset Dashboard", icon: Database, href: "/assets" },
+      { label: "Service Catalog", icon: Layers, href: "/assets/services" },
+      { label: "CI Explorer", icon: GitBranch, href: "/assets/ci" },
+      { label: "Dependencies", icon: GitBranch, href: "/assets/dependencies" },
+      { label: "Impact Analysis", icon: Layers, href: "/assets/impact" },
     ],
   },
   {
@@ -148,21 +175,19 @@ const navigation: NavSection[] = [
   {
     title: "REPORTING",
     items: [
-      { label: "Analytics Dashboard", icon: BarChart3, href: "/analytics" },
-      { label: "Custom Reports", icon: PieChart, href: "/analytics/reports" },
-      { label: "Export Center", icon: TrendingUp, href: "/analytics/exports" },
+      { label: "Analytics Dashboard", icon: BarChart3, href: "/home/analytics" },
+      { label: "Custom Reports", icon: PieChart, href: "/home/analytics/reports" },
+      { label: "Export Center", icon: TrendingUp, href: "/home/analytics/exports" },
     ],
   },
   {
-    title: "ADMINISTRATION",
+    title: "PLATFORM",
     items: [
-      { label: "Templates", icon: FileEdit, href: "/templates" },
-      { label: "Forms & Fields", icon: FormInput, href: "/forms" },
-      { label: "Communication Plans", icon: Megaphone, href: "/communication-plans" },
-      { label: "Audit Center", icon: ScrollText, href: "/audit" },
-      { label: "Governance", icon: Shield, href: "/audit/governance" },
-      { label: "Compliance", icon: Shield, href: "/audit/compliance" },
-      { label: "Access Visibility", icon: Eye, href: "/audit/access" },
+      { label: "Platform Dashboard", icon: Settings, href: "/platform" },
+      { label: "Audit Center", icon: ScrollText, href: "/platform/audit" },
+      { label: "Governance", icon: Shield, href: "/platform/governance" },
+      { label: "Compliance", icon: Shield, href: "/platform/compliance" },
+      { label: "Access Visibility", icon: Eye, href: "/platform/access" },
       { label: "Settings", icon: Settings, href: "/settings" },
     ],
   },

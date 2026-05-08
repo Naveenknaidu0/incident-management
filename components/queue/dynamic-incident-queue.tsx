@@ -110,14 +110,14 @@ export function DynamicIncidentQueue({ queueType }: DynamicIncidentQueueProps) {
 
   const handleNavigateToView = useCallback((view: string) => {
     const viewRoutes: Record<string, string> = {
-      all: "/incidents/all",
-      open: "/incidents/open",
-      "in-progress": "/incidents/in-progress",
-      resolved: "/incidents/resolved",
-      closed: "/incidents/closed",
-      escalated: "/incidents/escalated",
-      vip: "/incidents/vip",
-      watchlist: "/incidents/watchlist",
+      all: "/operations/incidents/all",
+      open: "/operations/incidents/open",
+      "in-progress": "/operations/incidents/in-progress",
+      resolved: "/operations/incidents/resolved",
+      closed: "/operations/incidents/closed",
+      escalated: "/operations/incidents/escalated",
+      vip: "/operations/incidents/vip",
+      watchlist: "/operations/incidents/watchlist",
       "major-incidents": "/major-incidents",
     }
     if (viewRoutes[view]) {
@@ -209,7 +209,7 @@ export function DynamicIncidentQueue({ queueType }: DynamicIncidentQueueProps) {
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <Link href="/" className="flex items-center gap-1">
+                  <Link href="/home" className="flex items-center gap-1">
                     <Home className="h-3.5 w-3.5" />
                     <span className="sr-only">Dashboard</span>
                   </Link>
@@ -218,7 +218,7 @@ export function DynamicIncidentQueue({ queueType }: DynamicIncidentQueueProps) {
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <Link href="/incidents/all">Incidents</Link>
+                  <Link href="/operations/incidents/all">Incidents</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />

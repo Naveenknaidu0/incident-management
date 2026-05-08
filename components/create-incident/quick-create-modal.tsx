@@ -78,13 +78,13 @@ export function QuickCreateModal({ open, onOpenChange }: QuickCreateModalProps) 
     
     // Close modal and redirect
     onOpenChange(false)
-    router.push("/incidents/INC0042782")
+    router.push("/operations/incidents/INC0042782")
   }
 
   const handleOpenFullForm = () => {
     // Save form state to URL params or local storage
     onOpenChange(false)
-    router.push("/incidents/create")
+    router.push("/operations/incidents/create")
   }
 
   const addTag = () => {
