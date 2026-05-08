@@ -82,6 +82,7 @@ const navigation: NavSection[] = [
   {
     title: "INCIDENT MANAGEMENT",
     items: [
+      { label: "Incident Dashboard", icon: AlertCircle, href: "/operations/incidents", badge: 847 },
       { label: "Create Incident", icon: Plus, href: "/operations/incidents/create" },
       { label: "All Incidents", icon: AlertCircle, href: "/operations/incidents/all", badge: 847 },
       { label: "Open", icon: FolderOpen, href: "/operations/incidents/open", badge: 42 },

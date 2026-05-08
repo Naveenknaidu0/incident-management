@@ -61,43 +61,69 @@ const kpis = [
   },
 ]
 
-export default function DashboardPage() {
+export default function ExecutiveCommandCenter() {
   return (
     <AppShell>
       <div className="h-full overflow-y-auto p-6">
-        {/* Page Header */}
-        <div className="mb-6">
-          <h1 className="text-xl font-semibold text-foreground">Operations Dashboard</h1>
-          <p className="text-sm text-muted-foreground">
-            Real-time overview of incident management operations
-          </p>
+        {/* Executive Header */}
+        <div className="mb-8 flex items-end justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">Executive Command Center</h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              Enterprise-wide operational intelligence and real-time service health monitoring
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="text-xs text-muted-foreground">Last updated: Now</p>
+            <p className="text-xs text-muted-foreground">Status: Operational</p>
+          </div>
         </div>
 
-        {/* KPI Row */}
-        <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
-          {kpis.map((kpi) => (
-            <KPICard key={kpi.title} {...kpi} />
-          ))}
+        {/* Executive KPI Strip - Critical Metrics */}
+        <div className="mb-8 border-t border-b border-border/50 bg-gradient-to-r from-background to-muted/30 py-4">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-4">Executive Metrics</p>
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+            {kpis.map((kpi) => (
+              <KPICard key={kpi.title} {...kpi} />
+            ))}
+          </div>
         </div>
 
-        {/* Major Incident Alert */}
-        <div className="mb-6">
+        {/* Major Incident Alert - Priority Alert */}
+        <div className="mb-8">
           <MajorIncidentPanel />
         </div>
 
-        {/* Main Grid */}
-        <div className="grid gap-6 lg:grid-cols-3">
-          {/* Left Column - Charts and Tables */}
+        {/* Operational Intelligence Grid */}
+        <div className="grid gap-6 lg:grid-cols-4">
+          {/* Left Column - Core Operations */}
           <div className="space-y-6 lg:col-span-2">
+            {/* Incident Trends */}
             <IncidentTrendChart />
+            
+            {/* Active Incidents Table */}
             <IncidentTable />
           </div>
 
-          {/* Right Column - Panels */}
-          <div className="space-y-6">
+          {/* Right Column - Health & Intelligence */}
+          <div className="space-y-6 lg:col-span-2">
+            {/* Service Health Overview */}
             <ServiceHealthPanel />
+            
+            {/* AI-Powered Insights */}
             <AIInsightsPanel />
           </div>
+        </div>
+
+        {/* Bottom Navigation Info */}
+        <div className="mt-12 border-t border-border/30 pt-6">
+          <p className="text-xs text-muted-foreground text-center">
+            Use the sidebar to navigate to specific modules. Quick links: 
+            <a href="/operations/incidents" className="text-[#E69F50] hover:underline mx-1">Incidents</a>
+            <a href="/operations/problems" className="text-[#E69F50] hover:underline mx-1">Problems</a>
+            <a href="/operations/changes" className="text-[#E69F50] hover:underline mx-1">Changes</a>
+            <a href="/assets" className="text-[#E69F50] hover:underline mx-1">Assets</a>
+          </p>
         </div>
       </div>
     </AppShell>
