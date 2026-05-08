@@ -1,211 +1,196 @@
 "use client"
 
-import { useState } from "react"
 import { AppShell } from "@/components/layout/app-shell"
+import { KPICard } from "@/components/dashboard/kpi-card"
+import { IncidentTrendChart } from "@/components/dashboard/incident-trend-chart"
+import { AIInsightsPanel } from "@/components/dashboard/ai-insights-panel"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import Link from "next/link"
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { ProblemKPIStrip } from "@/components/problems/problem-kpi-strip"
-import { ProblemTable, type Problem } from "@/components/problems/problem-table"
-import { KnownErrorCard } from "@/components/problems/known-error-card"
-import { PermanentFixTracker } from "@/components/problems/permanent-fix-tracker"
-import { LearningCenterCard } from "@/components/problems/learning-center-card"
-import { ProblemAnalytics } from "@/components/problems/problem-analytics"
-import {
-  Search,
   Plus,
-  Filter,
-  Download,
-  RefreshCw,
+  AlertTriangle,
   Bug,
-  Target,
-  TrendingUp,
+  Wrench,
   Lightbulb,
-  BarChart3,
+  TrendingUp,
+  CheckCircle,
+  Clock,
+  Link2,
+  Users,
+  FileText,
 } from "lucide-react"
 
-// Sample data
-const problems: Problem[] = [
-  { id: "PRB-001", title: "Recurring API Gateway Timeouts During Peak Hours", state: "under-investigation", relatedIncidents: 8, priority: "critical", affectedService: "API Gateway", owner: { name: "Sarah Chen" }, createdAt: "2h ago", isRecurring: true },
-  { id: "PRB-002", title: "Database Connection Pool Exhaustion", state: "root-cause-identified", relatedIncidents: 5, priority: "high", affectedService: "Database Cluster", owner: { name: "Mike Johnson" }, createdAt: "1d ago", hasKnownError: true },
-  { id: "PRB-003", title: "Payment Processing Intermittent Failures", state: "permanent-fix-planned", relatedIncidents: 12, priority: "critical", affectedService: "Payment Service", owner: { name: "Emily Davis" }, createdAt: "3d ago", isRecurring: true },
-  { id: "PRB-004", title: "Authentication Service Memory Leak", state: "monitoring", relatedIncidents: 3, priority: "medium", affectedService: "Auth Service", owner: { name: "James Wilson" }, createdAt: "5d ago" },
-  { id: "PRB-005", title: "Order Service Degradation Under Load", state: "new", relatedIncidents: 2, priority: "high", affectedService: "Order Service", createdAt: "6h ago" },
-  { id: "PRB-006", title: "CDN Cache Invalidation Issues", state: "resolved", relatedIncidents: 4, priority: "medium", affectedService: "CDN", owner: { name: "Lisa Brown" }, createdAt: "1w ago" },
+const kpis = [
+  {
+    title: "Open Problems",
+    value: 23,
+    change: { value: "+5 this week", trend: "up" as const },
+    icon: AlertTriangle,
+    variant: "default" as const,
+  },
+  {
+    title: "Known Errors",
+    value: 12,
+    change: { value: "3 with workarounds", trend: "neutral" as const },
+    icon: Bug,
+    variant: "warning" as const,
+  },
+  {
+    title: "Permanent Fixes",
+    value: 8,
+    change: { value: "2 in progress", trend: "up" as const },
+    icon: Wrench,
+    variant: "success" as const,
+  },
+  {
+    title: "RCA In Progress",
+    value: 5,
+    change: { value: "Avg 3.2 days", trend: "neutral" as const },
+    icon: Clock,
+    variant: "default" as const,
+  },
+  {
+    title: "Recurring",
+    value: 7,
+    change: { value: "4 high frequency", trend: "up" as const },
+    icon: TrendingUp,
+    variant: "critical" as const,
+  },
+  {
+    title: "Learning Records",
+    value: 156,
+    change: { value: "+12 this month", trend: "up" as const },
+    icon: Lightbulb,
+    variant: "default" as const,
+  },
 ]
 
-const knownErrors = [
-  { id: "KE-001", title: "Connection Pool Exhaustion Under High Load", workaround: "Manually restart the affected database nodes and reduce concurrent connection limits temporarily.", linkedIncidents: 5, affectedServices: ["Database Cluster", "API Gateway", "Order Service"], permanentFixStatus: "in-progress" as const, createdAt: "3d ago" },
-  { id: "KE-002", title: "Memory Leak in Authentication Module", workaround: "Schedule automatic restarts every 4 hours until permanent fix is deployed.", linkedIncidents: 3, affectedServices: ["Auth Service"], permanentFixStatus: "testing" as const, createdAt: "1w ago" },
-  { id: "KE-003", title: "Payment Gateway Timeout on Large Transactions", workaround: "Split large transactions into smaller batches or increase timeout threshold.", linkedIncidents: 8, affectedServices: ["Payment Service", "Order Service"], permanentFixStatus: "scheduled" as const, createdAt: "2w ago" },
+const recentProblems = [
+  {
+    id: "PRB0001847",
+    title: "Database Connection Pool Exhaustion During Peak Hours",
+    status: "RCA In Progress",
+    incidents: 34,
+    created: "3 days ago",
+    owner: "Database Team",
+  },
+  {
+    id: "PRB0001846",
+    title: "Authentication Service Memory Leak",
+    status: "Known Error",
+    incidents: 18,
+    created: "1 week ago",
+    owner: "Platform Team",
+  },
+  {
+    id: "PRB0001845",
+    title: "Payment Gateway Timeout Under Load",
+    status: "Permanent Fix",
+    incidents: 42,
+    created: "2 weeks ago",
+    owner: "Payment Team",
+  },
 ]
 
-const permanentFixes = [
-  { id: "FIX-001", title: "Implement Connection Pool Auto-Scaling", linkedProblem: "PRB-002", status: "testing" as const, progress: 75, riskLevel: "medium" as const, rollbackReady: true, validationChecks: { passed: 8, total: 10 }, targetDate: "Jan 25" },
-  { id: "FIX-002", title: "Memory Management Optimization", linkedProblem: "PRB-004", status: "staging" as const, progress: 90, riskLevel: "low" as const, rollbackReady: true, validationChecks: { passed: 12, total: 12 }, targetDate: "Jan 22" },
-  { id: "FIX-003", title: "Payment Service Circuit Breaker", linkedProblem: "PRB-003", status: "development" as const, progress: 45, riskLevel: "high" as const, rollbackReady: false, validationChecks: { passed: 3, total: 8 }, targetDate: "Feb 05" },
+const quickActions = [
+  { icon: Plus, label: "Create Problem", href: "#" },
+  { icon: Bug, label: "Add Known Error", href: "#" },
+  { icon: Link2, label: "Link Incident", href: "#" },
+  { icon: Wrench, label: "Permanent Fix", href: "#" },
+  { icon: FileText, label: "Start RCA", href: "#" },
+  { icon: Users, label: "Assign Owner", href: "#" },
 ]
 
-const learnings = [
-  { id: "LRN-001", type: "lesson" as const, title: "Importance of Connection Pool Monitoring", description: "Connection pool exhaustion events could have been prevented with proper monitoring alerts set at 70% threshold.", linkedProblem: "PRB-002", status: "implemented" as const, impact: "high" as const, createdAt: "2d ago" },
-  { id: "LRN-002", type: "automation" as const, title: "Auto-scaling for Database Connections", description: "Implement automatic connection pool scaling based on load patterns.", linkedProblem: "PRB-002", status: "approved" as const, impact: "high" as const, createdAt: "3d ago" },
-  { id: "LRN-003", type: "monitoring" as const, title: "Enhanced Memory Leak Detection", description: "Add JVM heap monitoring with automatic alerting when memory usage exceeds 80%.", linkedProblem: "PRB-004", status: "proposed" as const, impact: "medium" as const, createdAt: "5d ago" },
-]
-
-export default function ProblemsPage() {
-  const [activeTab, setActiveTab] = useState("all")
-  const [searchQuery, setSearchQuery] = useState("")
-
+export default function ProblemManagementPage() {
   return (
     <AppShell>
-      <div className="flex h-full flex-col overflow-hidden">
+      <div className="h-full overflow-y-auto p-6">
         {/* Header */}
-        <div className="shrink-0 border-b border-border bg-card px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-lg font-semibold text-[#0D3133]">Problem Management</h1>
-              <p className="text-sm text-muted-foreground">Root cause analysis and permanent fix tracking</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="gap-2">
-                <Download className="h-4 w-4" />
-                Export
-              </Button>
-              <Button size="sm" className="gap-2 bg-[#0D3133] hover:bg-[#0D3133]/90">
-                <Plus className="h-4 w-4" />
-                Create Problem
-              </Button>
-            </div>
+        <div className="mb-6 flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-semibold text-foreground">Problem Management</h1>
+            <p className="text-sm text-muted-foreground">
+              Root cause analysis, known errors, and permanent fixes
+            </p>
           </div>
+          <Button className="bg-[#0D3133] hover:bg-[#0D3133]/90">
+            <Plus className="h-4 w-4 mr-2" />
+            Create Problem
+          </Button>
+        </div>
+
+        {/* KPI Strip */}
+        <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+          {kpis.map((kpi) => (
+            <KPICard key={kpi.title} {...kpi} />
+          ))}
+        </div>
+
+        {/* Quick Actions */}
+        <div className="mb-6 grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-6">
+          {quickActions.map((action) => (
+            <Link key={action.label} href={action.href}>
+              <Button
+                variant="outline"
+                className="w-full justify-start text-xs h-9"
+              >
+                <action.icon className="h-3.5 w-3.5 mr-1.5" />
+                {action.label}
+              </Button>
+            </Link>
+          ))}
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="p-6 space-y-6">
-            {/* KPI Strip */}
-            <ProblemKPIStrip />
-
-            {/* Filters */}
-            <div className="flex items-center gap-3">
-              <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  placeholder="Search problems, root causes, services..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9"
-                />
-              </div>
-              <Select defaultValue="all">
-                <SelectTrigger className="w-[150px]">
-                  <SelectValue placeholder="RCA State" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All States</SelectItem>
-                  <SelectItem value="new">New</SelectItem>
-                  <SelectItem value="under-investigation">Under Investigation</SelectItem>
-                  <SelectItem value="root-cause-identified">Root Cause Identified</SelectItem>
-                  <SelectItem value="permanent-fix-planned">Fix Planned</SelectItem>
-                  <SelectItem value="monitoring">Monitoring</SelectItem>
-                  <SelectItem value="resolved">Resolved</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select defaultValue="all">
-                <SelectTrigger className="w-[140px]">
-                  <SelectValue placeholder="Priority" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Priorities</SelectItem>
-                  <SelectItem value="critical">Critical</SelectItem>
-                  <SelectItem value="high">High</SelectItem>
-                  <SelectItem value="medium">Medium</SelectItem>
-                  <SelectItem value="low">Low</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select defaultValue="all">
-                <SelectTrigger className="w-[150px]">
-                  <SelectValue placeholder="Service" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Services</SelectItem>
-                  <SelectItem value="api-gateway">API Gateway</SelectItem>
-                  <SelectItem value="database">Database Cluster</SelectItem>
-                  <SelectItem value="payment">Payment Service</SelectItem>
-                  <SelectItem value="auth">Auth Service</SelectItem>
-                </SelectContent>
-              </Select>
-              <Button variant="outline" size="icon">
-                <Filter className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" size="icon">
-                <RefreshCw className="h-4 w-4" />
-              </Button>
-            </div>
-
-            {/* Tabs */}
-            <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList>
-                <TabsTrigger value="all" className="gap-2">
-                  <Target className="h-4 w-4" />
-                  All Problems
-                </TabsTrigger>
-                <TabsTrigger value="known-errors" className="gap-2">
-                  <Bug className="h-4 w-4" />
-                  Known Errors
-                </TabsTrigger>
-                <TabsTrigger value="recurring" className="gap-2">
-                  <RefreshCw className="h-4 w-4" />
-                  Recurring
-                </TabsTrigger>
-                <TabsTrigger value="fixes" className="gap-2">
-                  <TrendingUp className="h-4 w-4" />
-                  Permanent Fixes
-                </TabsTrigger>
-                <TabsTrigger value="learnings" className="gap-2">
-                  <Lightbulb className="h-4 w-4" />
-                  Learnings
-                </TabsTrigger>
-                <TabsTrigger value="analytics" className="gap-2">
-                  <BarChart3 className="h-4 w-4" />
-                  Analytics
-                </TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="all" className="mt-4">
-                <ProblemTable problems={problems} />
-              </TabsContent>
-
-              <TabsContent value="known-errors" className="mt-4">
-                <div className="grid grid-cols-2 gap-4">
-                  {knownErrors.map((error) => (
-                    <KnownErrorCard key={error.id} error={error} />
+        <div className="grid gap-6 lg:grid-cols-3">
+          {/* Left Column */}
+          <div className="space-y-6 lg:col-span-2">
+            <IncidentTrendChart />
+            <Card>
+              <CardHeader className="py-4 px-5 border-b">
+                <CardTitle className="text-base">Recent Problems</CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="divide-y divide-border">
+                  {recentProblems.map((problem) => (
+                    <div
+                      key={problem.id}
+                      className="flex items-center justify-between p-3 hover:bg-muted/50 transition-colors"
+                    >
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-xs text-muted-foreground">{problem.id}</span>
+                          <span className="text-sm font-medium">{problem.title}</span>
+                        </div>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="text-xs text-muted-foreground">{problem.created}</span>
+                          <Badge variant="outline" className="text-xs">{problem.incidents} incidents</Badge>
+                        </div>
+                      </div>
+                      <Badge
+                        className="text-xs"
+                        variant={
+                          problem.status === "Permanent Fix"
+                            ? "secondary"
+                            : problem.status === "Known Error"
+                            ? "outline"
+                            : "default"
+                        }
+                      >
+                        {problem.status}
+                      </Badge>
+                    </div>
                   ))}
                 </div>
-              </TabsContent>
+              </CardContent>
+            </Card>
+          </div>
 
-              <TabsContent value="recurring" className="mt-4">
-                <ProblemTable problems={problems.filter((p) => p.isRecurring)} />
-              </TabsContent>
-
-              <TabsContent value="fixes" className="mt-4">
-                <PermanentFixTracker fixes={permanentFixes} />
-              </TabsContent>
-
-              <TabsContent value="learnings" className="mt-4">
-                <LearningCenterCard learnings={learnings} />
-              </TabsContent>
-
-              <TabsContent value="analytics" className="mt-4">
-                <ProblemAnalytics />
-              </TabsContent>
-            </Tabs>
+          {/* Right Column */}
+          <div className="space-y-6">
+            <AIInsightsPanel />
           </div>
         </div>
       </div>

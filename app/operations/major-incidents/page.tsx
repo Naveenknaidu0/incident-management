@@ -1,6 +1,7 @@
 "use client"
 
 import { AppShell } from "@/components/layout/app-shell"
+import { KPICard } from "@/components/dashboard/kpi-card"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -18,8 +19,56 @@ import {
   CheckCircle,
   ExternalLink,
   History,
+  Phone,
+  MessageSquare,
+  Zap,
 } from "lucide-react"
 import Link from "next/link"
+
+const kpis = [
+  {
+    title: "Active SEV-1",
+    value: 1,
+    change: { value: "In mitigation", trend: "neutral" as const },
+    icon: AlertTriangle,
+    variant: "critical" as const,
+  },
+  {
+    title: "Active SEV-2",
+    value: 1,
+    change: { value: "Monitoring", trend: "neutral" as const },
+    icon: AlertTriangle,
+    variant: "warning" as const,
+  },
+  {
+    title: "This Month",
+    value: 8,
+    change: { value: "-2 from last month", trend: "down" as const },
+    icon: History,
+    variant: "default" as const,
+  },
+  {
+    title: "Avg Resolution",
+    value: "2h 15m",
+    change: { value: "-18min", trend: "down" as const },
+    icon: Clock,
+    variant: "success" as const,
+  },
+  {
+    title: "Total MIMs",
+    value: 47,
+    change: { value: "This year", trend: "neutral" as const },
+    icon: Zap,
+    variant: "default" as const,
+  },
+  {
+    title: "MTTR Trend",
+    value: "Improving",
+    change: { value: "+8.2%", trend: "up" as const },
+    icon: TrendingUp,
+    variant: "success" as const,
+  },
+]
 
 const activeMajorIncidents = [
   {
@@ -69,84 +118,59 @@ const recentMajorIncidents = [
     resolvedAt: "Yesterday 18:30 UTC",
     commander: { name: "David Park" },
   },
-  {
-    id: "MIM0001230",
-    title: "API Gateway Rate Limiting Issue",
-    severity: "SEV-3" as const,
-    status: "Resolved",
-    duration: "32m",
-    resolvedAt: "2 days ago",
-    commander: { name: "Lisa Wong" },
-  },
+]
+
+const quickActions = [
+  { icon: Plus, label: "Declare Outage", href: "#" },
+  { icon: Phone, label: "Start Bridge", href: "#" },
+  { icon: MessageSquare, label: "Send Broadcast", href: "#" },
+  { icon: AlertTriangle, label: "Executive Alert", href: "#" },
+  { icon: Zap, label: "Start PIR", href: "#" },
+  { icon: Users, label: "Command Team", href: "#" },
 ]
 
 export default function MajorIncidentsPage() {
   return (
     <AppShell>
-      <div className="h-full overflow-y-auto">
-        <div className="p-6 space-y-6">
-          {/* Header */}
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-semibold text-foreground">Major Incident Management</h1>
-              <p className="text-sm text-muted-foreground mt-1">
-                Command center for critical business-impacting incidents
-              </p>
-            </div>
-            <Button className="bg-red-600 hover:bg-red-700 text-white">
-              <Plus className="h-4 w-4 mr-2" />
-              Declare Major Incident
-            </Button>
+      <div className="h-full overflow-y-auto p-6">
+        {/* Header */}
+        <div className="mb-6 flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-semibold text-foreground">Major Incident Management</h1>
+            <p className="text-sm text-muted-foreground">
+              Command center for critical business-impacting incidents
+            </p>
           </div>
+          <Button className="bg-red-600 hover:bg-red-700">
+            <Plus className="h-4 w-4 mr-2" />
+            Declare Outage
+          </Button>
+        </div>
 
-          {/* Summary Stats */}
-          <div className="grid grid-cols-4 gap-4">
-            <Card className="border-red-200 bg-red-50">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-red-600 uppercase tracking-wide font-medium">Active SEV-1</p>
-                    <p className="text-2xl font-bold text-red-700 mt-1">1</p>
-                  </div>
-                  <AlertTriangle className="h-8 w-8 text-red-500 opacity-50" />
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="border-orange-200 bg-orange-50">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-orange-600 uppercase tracking-wide font-medium">Active SEV-2</p>
-                    <p className="text-2xl font-bold text-orange-700 mt-1">1</p>
-                  </div>
-                  <AlertTriangle className="h-8 w-8 text-orange-500 opacity-50" />
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium">This Month</p>
-                    <p className="text-2xl font-bold text-foreground mt-1">8</p>
-                  </div>
-                  <History className="h-8 w-8 text-muted-foreground opacity-50" />
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium">Avg Resolution</p>
-                    <p className="text-2xl font-bold text-foreground mt-1">2h 15m</p>
-                  </div>
-                  <Clock className="h-8 w-8 text-muted-foreground opacity-50" />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+        {/* KPI Strip */}
+        <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+          {kpis.map((kpi) => (
+            <KPICard key={kpi.title} {...kpi} />
+          ))}
+        </div>
 
+        {/* Quick Actions */}
+        <div className="mb-6 grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-6">
+          {quickActions.map((action) => (
+            <Link key={action.label} href={action.href}>
+              <Button
+                variant="outline"
+                className="w-full justify-start text-xs h-9"
+              >
+                <action.icon className="h-3.5 w-3.5 mr-1.5" />
+                {action.label}
+              </Button>
+            </Link>
+          ))}
+        </div>
+
+        {/* Main Content */}
+        <div className="space-y-6">
           {/* Active Major Incidents */}
           <Card>
             <CardHeader className="py-4 px-5 border-b">
@@ -164,7 +188,7 @@ export default function MajorIncidentsPage() {
                 {activeMajorIncidents.map((incident) => (
                   <Link
                     key={incident.id}
-                    href={`/major-incidents/${incident.id}`}
+                    href={`/operations/major-incidents/${incident.id}`}
                     className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors"
                   >
                     <div className="flex items-center gap-4">
@@ -224,7 +248,7 @@ export default function MajorIncidentsPage() {
             </CardContent>
           </Card>
 
-          {/* Recent Major Incidents */}
+          {/* Recently Resolved */}
           <Card>
             <CardHeader className="py-4 px-5 border-b">
               <CardTitle className="text-base font-semibold flex items-center gap-2">
@@ -237,7 +261,7 @@ export default function MajorIncidentsPage() {
                 {recentMajorIncidents.map((incident) => (
                   <Link
                     key={incident.id}
-                    href={`/major-incidents/${incident.id}`}
+                    href={`/operations/major-incidents/${incident.id}`}
                     className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors"
                   >
                     <div className="flex items-center gap-4">
